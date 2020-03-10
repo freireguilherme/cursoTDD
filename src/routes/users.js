@@ -1,14 +1,13 @@
 // rotas para lidar com requisições para usuários
-module.exports = () => {
+module.exports = (app) => {
   const findAll = (req, res) => { // função para listar usuários
-    const users = [
-      { name: 'John Doe', mail: 'john@mail.com' },
-    ];
-    res.status(200).json(users);
+    app.db('users').select()
+      .then((result) => res.status(200).json(result));
   };
 
-  const create = (req, res) => { // função para criar novo usuário
-    res.status(201).json(req.body);
+  const create = async (req, res) => { // função para criar novo usuário
+    const result = await app.db('users').insert(req.body, '*'); // retorna uma array
+    res.status(201).json(result[0]); // para retornar o primeiro usuario
   };
   return { findAll, create };
 };
