@@ -7,7 +7,8 @@ module.exports = (app) => {
 
   const create = async (req, res) => { // função para criar novo usuário
     const result = await app.services.user.save(req.body); // retorna uma array
-    res.status(201).json(result[0]); // para retornar o primeiro usuario
+    if (result.error) return res.status(400).json(result); // se error, retorna status 400
+    return res.status(201).json(result[0]); // para retornar o primeiro usuario
   };
   return { findAll, create };
 };
