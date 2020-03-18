@@ -19,11 +19,22 @@ test('Deve inserir uma conta com sucesso', () => {
 });
 
 test('Deve listar todas as contas', () => {
-  return app.db('accounts')
+  return app.db('accounts') // cada teste monta a massa necessaria para executar
     .insert({ name: 'Acc list', user_id: user.id }) // inserir uma conta, para o teste ser atomico
     .then(() => request(app).get(MAIN_ROUTE)) // requisição get
     .then((res) => {
       expect(res.status).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
+    });
+});
+
+test('Deve retornar uma conta por id', () => {
+  return app.db('accounts')
+    .insert({ name: 'Acc by Id', user_id: user.id }, ['id'])
+    .then((acc) => request(app).get(`${MAIN_ROUTE}/${acc[0].id}`))
+    .then((res) => {
+      expect(res.status).toBe(200);
+      expect(res.body.name).toBe('Acc by Id');
+      expect(res.body.user_id).toBe(user.id);
     });
 });
