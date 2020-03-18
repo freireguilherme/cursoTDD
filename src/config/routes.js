@@ -4,5 +4,6 @@ module.exports = (app) => {
     .post(app.routes.users.create); // quando receber um post, direciona para a função de criar
 
   app.route('/accounts')
+    .get(app.routes.accounts.getAll)
     .post(app.routes.accounts.create);
 };
