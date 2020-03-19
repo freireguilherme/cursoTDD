@@ -38,3 +38,23 @@ test('Deve retornar uma conta por id', () => {
       expect(res.body.user_id).toBe(user.id);
     });
 });
+
+test('Deve alterar uma conta', () => {
+  return app.db('accounts')
+    .insert({ name: 'Acc to Update', user_id: user.id }, ['id'])
+    .then((acc) => request(app).put(`${MAIN_ROUTE}/${acc[0].id}`)
+      .send({ name: 'Acc update' }))
+    .then((res) => {
+      expect(res.status).toBe(200);
+      expect(res.body.name).toBe('Acc update');
+    });
+});
+
+test('Deve remover uma conta', () => {
+  return app.db('accounts')
+    .insert({ name: 'Acc to remove', user_id: user.id }, ['id'])
+    .then((acc) => request(app).delete(`${MAIN_ROUTE}/${acc[0].id}`))
+    .then((res) => {
+      expect(res.status).toBe(204); // status referente a body vazio
+    });
+});
