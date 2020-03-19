@@ -1,13 +1,10 @@
 const app = require('express')();
 const consign = require('consign');
 const knex = require('knex');
-// const knexlogger = require('knex-logger');
 const knexfile = require('../knexfile.js');
 
 // TODO criar chaveamento dinamico
 app.db = knex(knexfile.test);
-
-// app.use(knexlogger(app.db)); // knex-logger irá mostrar as consultas ao db nos testes
 
 consign({ cwd: 'src', verbose: false }) // consign irá organizar os arquivos
   .include('./config/middlewares.js') // incluindo o middleware (body-parser)
@@ -15,6 +12,13 @@ consign({ cwd: 'src', verbose: false }) // consign irá organizar os arquivos
   .then('./routes') // as rotas
   .then('./config/routes.js') // as configurações de rotas
   .into(app); // isso tudo no aplicativo app
+
+app.use((err, req, res, next) => {
+  const { name, message, stack } = err;
+  if (name === 'ValidationError') res.status(400).json({ error: err.message });
+  else res.status(500).json({ name, message, stack });
+  next();
+});
 
 /*
 app.get('/', (req, res) => {
