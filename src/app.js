@@ -16,9 +16,11 @@ consign({ cwd: 'src', verbose: false }) // consign irá organizar os arquivos
   .then('./config/routes.js') // as configurações de rotas
   .into(app); // isso tudo no aplicativo app
 
+/*
 app.get('/', (req, res) => {
   res.status(200).send();
 });
+*/
 
 // aleternativa ao knex-logger
 /* app.db.on('query', (query) => {
