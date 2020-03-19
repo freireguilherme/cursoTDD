@@ -18,6 +18,21 @@ test('Deve inserir uma conta com sucesso', () => {
     });
 });
 
+test('Não deve inserir uma conta sem nome', () => {
+  return request(app).post(MAIN_ROUTE)
+    .send({ user_id: user.id })
+    .then((result) => {
+      expect(result.status).toBe(400);
+      expect(result.body.error).toBe('Nome é um atributo obrigatório');
+    });
+});
+
+// ToDO autenticação
+test.skip('Não deve inserir uma conta de nome duplicado para o mesmo usuario', () => {
+
+});
+
+// ToDo nao se deve listar todas as contas
 test('Deve listar todas as contas', () => {
   return app.db('accounts') // cada teste monta a massa necessaria para executar
     .insert({ name: 'Acc list', user_id: user.id }) // inserir uma conta, para o teste ser atomico
@@ -28,6 +43,11 @@ test('Deve listar todas as contas', () => {
     });
 });
 
+test.skip('Deve listar apenas as contas do usuario', () => {
+
+});
+
+// ToDo deve retornar a conta apenas do usuario autorizado
 test('Deve retornar uma conta por id', () => {
   return app.db('accounts')
     .insert({ name: 'Acc by Id', user_id: user.id }, ['id'])
@@ -39,6 +59,11 @@ test('Deve retornar uma conta por id', () => {
     });
 });
 
+test.skip('Não deve retornar uma conta de outro usuario', () => {
+
+});
+
+// ToDo deve alterar a conta apenas do usuario autorizado
 test('Deve alterar uma conta', () => {
   return app.db('accounts')
     .insert({ name: 'Acc to Update', user_id: user.id }, ['id'])
@@ -50,6 +75,11 @@ test('Deve alterar uma conta', () => {
     });
 });
 
+test.skip('Não deve alterar uma conta de outro usuario', () => {
+
+});
+
+// ToDo deve remover a conta apenas do usuario autorizado
 test('Deve remover uma conta', () => {
   return app.db('accounts')
     .insert({ name: 'Acc to remove', user_id: user.id }, ['id'])
@@ -57,4 +87,8 @@ test('Deve remover uma conta', () => {
     .then((res) => {
       expect(res.status).toBe(204); // status referente a body vazio
     });
+});
+
+test.skip('Não deve remover uma conta de outro usuario', () => {
+
 });
