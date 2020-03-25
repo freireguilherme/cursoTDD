@@ -27,7 +27,7 @@ test('Nao deve autenticar usuario com senha errada', () => {
     });
 });
 
-test('Nao deve autenticar usuario com senha errada', () => {
+test('Nao deve autenticar usuario nao existente', () => {
   return request(app).post('/auth/signin')
     .send({ mail: 'naoExiste@mail.com', passwd: '654321' })
     .then((res) => {
