@@ -3,14 +3,17 @@ module.exports = (app) => {
     .post(app.routes.auth.signin);
 
   app.route('/users')
+    .all(app.config.passport.authenticate())
     .get(app.routes.users.findAll) // quando receber um get, direciona para a função de listar
     .post(app.routes.users.create); // quando receber um post, direciona para a função de criar
 
   app.route('/accounts')
+    .all(app.config.passport.authenticate())
     .get(app.routes.accounts.getAll)
     .post(app.routes.accounts.create);
 
   app.route('/accounts/:id')
+    .all(app.config.passport.authenticate())
     .get(app.routes.accounts.get)
     .put(app.routes.accounts.update)
     .delete(app.routes.accounts.remove);
