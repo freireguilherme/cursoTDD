@@ -10,12 +10,12 @@ module.exports = (app) => {
       .then((user) => {
         if (!user) throw new ValidationError('Usuário ou senha inválido');
         if (bcrypt.compareSync(req.body.passwd, user.passwd)) {
-          const playload = {
+          const payload = {
             id: user.id,
             name: user.name,
             mail: user.mail,
           };
-          const token = jwt.encode(playload, secret);
+          const token = jwt.encode(payload, secret);
           res.status(200).json({ token });
         } else throw new ValidationError('Usuário ou senha inválido');
       }).catch((err) => next(err));
