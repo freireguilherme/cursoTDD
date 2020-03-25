@@ -7,7 +7,8 @@ const knexfile = require('../knexfile.js');
 app.db = knex(knexfile.test);
 
 consign({ cwd: 'src', verbose: false }) // consign irá organizar os arquivos
-  .include('./config/middlewares.js') // incluindo o middleware (body-parser)
+  .include('./config/passport.js') // incluindo o middleware (body-parser)
+  .then('./config/middlewares.js') // incluindo o middleware (body-parser)
   .then('./services') // serviços
   .then('./routes') // as rotas
   .then('./config/routes.js') // as configurações de rotas
