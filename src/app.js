@@ -11,7 +11,7 @@ consign({ cwd: 'src', verbose: false }) // consign irá organizar os arquivos
   .then('./config/middlewares.js') // incluindo o middleware (body-parser)
   .then('./services') // serviços
   .then('./routes') // as rotas
-  .then('./config/routes.js') // as configurações de rotas
+  .then('./config/router.js') // as configurações de rotas
   .into(app); // isso tudo no aplicativo app
 
 app.use((err, req, res, next) => {
