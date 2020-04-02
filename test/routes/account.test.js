@@ -73,8 +73,15 @@ test('Deve retornar uma conta por id', () => {
     });
 });
 
-test.skip('Não deve retornar uma conta de outro usuario', () => {
-
+test('Não deve retornar uma conta de outro usuario', () => {
+  return app.db('accounts')
+    .insert({ name: 'Acc User #2', user_id: user2.id }, ['id'])
+    .then((acc) => request(app).get(`${MAIN_ROUTE}/${acc[0].id}`)
+      .set('authorization', `bearer ${user.token}`))
+    .then((res) => {
+      expect(res.status).toBe(403);
+      expect(res.body.error).toBe('Este recurso não pertece ao usuário');
+    });
 });
 
 // ToDo deve alterar a conta apenas do usuario autorizado
