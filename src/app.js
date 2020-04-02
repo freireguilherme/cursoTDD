@@ -17,6 +17,7 @@ consign({ cwd: 'src', verbose: false }) // consign irá organizar os arquivos
 app.use((err, req, res, next) => {
   const { name, message, stack } = err;
   if (name === 'ValidationError') res.status(400).json({ error: err.message });
+  if (name === 'RecursoIndevidoError') res.status(403).json({ error: err.message });
   else res.status(500).json({ name, message, stack });
   next();
 });
