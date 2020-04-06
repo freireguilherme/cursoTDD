@@ -85,3 +85,25 @@ test('Deve remover uma transação', () => {
       expect(res.status).toBe(204);
     });
 });
+
+test('Não deve remover uma transação de outro user', () => {
+  return app.db('transactions').insert(
+    { description: 'T for delete', date: new Date(), ammount: 50, type: 'I', acc_id: accUser2.id }, ['id'],
+  ).then((transaction) => request(app).delete(`${MAIN_ROUTE}/${transaction[0].id}`)
+    .set('authorization', `bearer ${user.token}`))
+    .then((res) => {
+      expect(res.status).toBe(403);
+      expect(res.body.error).toBe('Este recurso não pertece ao usuário');
+    });
+});
+
+test('Não deve alterar uma transação de outro user', () => {
+  return app.db('transactions').insert(
+    { description: 'T for update', date: new Date(), ammount: 50, type: 'I', acc_id: accUser2.id }, ['id'],
+  ).then((transaction) => request(app).put(`${MAIN_ROUTE}/${transaction[0].id}`)
+    .set('authorization', `bearer ${user.token}`))
+    .then((res) => {
+      expect(res.status).toBe(403);
+      expect(res.body.error).toBe('Este recurso não pertece ao usuário');
+    });
+});
