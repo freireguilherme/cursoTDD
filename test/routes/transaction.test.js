@@ -129,3 +129,27 @@ test('Transações de saída devem ser negativas', () => {
       expect(res.body.ammount).toBe('-100.00');
     });
 });
+
+describe('Ao tentar inserir uma transação inválida', () => {
+  let ValidTransaction;
+  beforeAll(() => {
+    ValidTransaction = { description: 'New T', date: new Date(), ammount: 100, type: 'I', acc_id: accUser.id };
+  });
+
+  const testTemplate = (newData, errorMessage) => {
+    return request(app).post(MAIN_ROUTE)
+      .set('authorization', `bearer ${user.token}`)
+      .send({ ...ValidTransaction, ...newData })
+      .then((res) => {
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe(errorMessage);
+      });
+  };
+
+  test('Nao deve inserir sem descrição', () => testTemplate({ description: null }, 'Descrição é um atributo obrigatório'));
+  test('Nao deve inserir sem valor', () => testTemplate({ ammount: null }, 'Valor é um atributo obrigatório'));
+  test('Nao deve inserir sem data', () => testTemplate({ date: null }, 'Data é um atributo obrigatório'));
+  test('Nao deve inserir sem conta', () => testTemplate({ acc_id: null }, 'Conta é um atributo obrigatório'));
+  test('Nao deve inserir sem tipo', () => testTemplate({ type: null }, 'Tipo é um atributo obrigatório'));
+  test('Nao deve inserir com tipo inválido', () => testTemplate({ type: 'A' }, 'Tipo inválido'));
+});
