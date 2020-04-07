@@ -97,6 +97,17 @@ test('Não deve remover uma transação de outro user', () => {
     });
 });
 
+test('Nao deve remover conta com transação', () => {
+  return app.db('transactions').insert(
+    { description: 'T for delete', date: new Date(), ammount: 50, type: 'I', acc_id: accUser.id }, ['id'],
+  ).then(() => request(app).delete(`/v1/accounts/${accUser.id}`)
+    .set('authorization', `bearer ${user.token}`)
+    .then((res) => {
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Essa conta possui transações associadas');
+    }));
+});
+
 test('Não deve alterar uma transação de outro user', () => {
   return app.db('transactions').insert(
     { description: 'T for update', date: new Date(), ammount: 50, type: 'I', acc_id: accUser2.id }, ['id'],
