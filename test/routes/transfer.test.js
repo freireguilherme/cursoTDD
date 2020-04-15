@@ -106,3 +106,12 @@ describe('Ao tentar salvar uma transferencia invalida', () => {
   test('Nao deve inserir se as contas de origem e destino forem as mesmas', () => testTemplate({ acc_dest_id: 10000 }, 'Não é possível transferir de uma conta para ela mesma'));
   test('Nao deve inserir se as contas pertecerem a outro usuario', () => testTemplate({ acc_ori_id: 10002 }, 'Conta #10002 não pertence ao usuário'));
 });
+
+test('Deve retornar uma transferencia por ID', () => {
+  return request(app).get(`${MAIN_ROUTE}/10000`)
+    .set('authorization', `bearer ${TOKEN}`)
+    .then((res) => {
+      expect(res.status).toBe(200);
+      expect(res.body.description).toBe('transfer #1');
+    });
+});
