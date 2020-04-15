@@ -29,8 +29,6 @@ module.exports = (app) => {
   };
 
   const save = async (transfer) => {
-    await validate(transfer);
-
     const result = await app.db('transfers').insert(transfer, '*');
     const transferID = result[0].id;
 
@@ -44,7 +42,6 @@ module.exports = (app) => {
   };
 
   const update = async (id, transfer) => {
-    await validate(transfer);
     const result = await app.db('transfers')
       .where({ id })
       .update(transfer, '*');
@@ -59,5 +56,5 @@ module.exports = (app) => {
     return result;
   };
 
-  return { find, save, findOne, update };
+  return { find, save, findOne, update, validate };
 };
