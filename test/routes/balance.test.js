@@ -133,7 +133,7 @@ describe('Ao calcular o saldo do usuario...', () => {
   });
   test('Deve considerar transferencias', () => {
     return request(app).post(ROUTE_TRANSFER)
-      .send({ description: '1', date: new Date(), ammount: 250, type: 'I', acc_ori_id: 10100, acc_dest_id: 10101 })
+      .send({ description: '1', date: new Date(), ammount: 250, acc_ori_id: 10100, acc_dest_id: 10101 })
       .set('authorization', `bearer ${TOKEN}`)
       .then(() => {
         return request(app).get(MAIN_ROUTE)
@@ -144,7 +144,7 @@ describe('Ao calcular o saldo do usuario...', () => {
             expect(res.body[0].id).toBe(10100);
             expect(res.body[0].sum).toBe('-100.00');
             expect(res.body[1].id).toBe(10101);
-            expect(res.body[1].sum).toBe('200.00');
+            expect(res.body[1].sum).toBe('300.00');
           });
       });
   });
